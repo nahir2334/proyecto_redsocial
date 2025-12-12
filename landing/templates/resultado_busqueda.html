@@ -1,0 +1,88 @@
+{%extends './plantilla_user.html'%}
+{% block cuerpo %}
+{% load gravatar %}
+{% load static%}
+{% comment %} Mostrar  posts {% endcomment %}
+   
+{% if perfiles%}
+    {%  for perfil in perfiles%}
+        <section class = "perfil">
+            <article class = "perfil__header">
+                <div class="perfil__imagen">
+                {% if perfil.foto_perfil %}
+                    <img src="{{ perfil.foto_perfil.url }}">
+                {% else %}
+                    <img src="{% gravatar_url perfil.user.email %}">
+                {% endif %} 
+                <a href="{% url 'showProfile' id=perfil.user.id%}">
+                    <h4>{{perfil.user.username}}</h4>   
+                </a>  
+                </div>
+            </article>
+            <article class = "perfil__info">
+                <p>{{perfil.biografia}}</p>   
+                <p>{{perfil.preferencias}}</p>   
+                <p>{{perfil.enlaces}}</p>   
+            </article>
+            <article class="perfil__botones">
+            {% if perfil.user.id != request.user.id %}
+                {% for  requests in friend_requests  %}
+                {% if requests.from_user == perfil.user and requests.to_user == request.user and requests.status == 'pending'%}
+                        <a href="{%  url 'acceptRequest' id=perfil.user.id%}" class="btn">Aceptar</a>
+                        <a href="{%  url 'cancelRequest' id=perfil.user.id%}" class="btn">Denegar</a>
+                {%elif  requests.from_user == request.user and requests.to_user == perfil.user and requests.status == 'pending'%}
+                        <a href="{%  url 'cancelRequest' id=perfil.user.id%}" class="btn">Cancelar</a>
+
+                {% elif requests.from_user == request.user and requests.to_user == perfil.user and requests.status == 'accepted'%}
+                        <a href="{%  url 'deleteFriends' id=perfil.user.id%}" class="btn">Eliminar</a> 
+                {% elif requests.from_user == perfil.user and requests.to_user == request.user and requests.status == 'accepted'%}
+                        <a href="{%  url 'deleteFriends' id=perfil.user.id%}" class="btn">Eliminar</a> 
+                {% elif requests.from_user != request.user and requests.to_user != request.user and requests.from_user != perfil.user and requests.to_user != perfil.user %}
+                    <a href="{%  url 'sentRequest' id=perfil.user.id%}" class="btn">Solicitar</a>
+                {% endif %}
+            
+                {% endfor %}
+                
+            {% endif %}
+           
+            </article>
+            
+
+        </section>
+    {%endfor%}
+{% endif %}   
+        
+
+{%for post in posts%}
+        {% if post.publicado%}
+         <article class="post">
+                <div class="post__header">
+                    {% if post.user.foto_perfil %}
+                        <img src="{{post.user.foto_perfil.url }}">
+                    {% else %}
+                        {% comment %} <img src="{% gravatar_url post.user.user.email %}"> {% endcomment %}
+                    {% endif %} 
+                    <h4>{{post.user.user.username}}</h4>
+                    <p class="post__fecha">{{post.fecha}}</p>
+                    
+                </div>
+                <div class="post__content">
+                    <h2>{{post.titulo}}</h2>
+                    {{post.contenido}}
+                    {% if post.image_field %}
+                        <img src="{{ post.image_field.url }}" alt="{{ post.titulo }}" class="post_image"> 
+                    {% endif %}
+                </div>
+                <div class="post__interaction">
+                    <div class="post__opciones">
+                        <a href="{% url 'likePost' id=post.id %}"> <i class="fa-solid fa-heart fa-xl"></i> {{post.nom_of_likes}}</a>
+                        <a href="{% url 'detallePosteo' id=post.id%}"><i class="fa-regular fa-comment fa-xl"></i></a>
+                        <a href="{% url 'compartirPost' id=post.id%}"><i class="fa-regular fa-share-from-square fa-xl"></i></a>
+                    </div>
+                </div>
+            </article>
+        {% endif %}
+{%endfor%}
+             
+
+{% endblock %}

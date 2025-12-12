@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%load static %}
+    <link rel="stylesheet" href="{%  static './css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title> {% block title %}Landing{% endblock %}</title>
+</head>
+<body>
+    <section class="contenedor">
+        <header class="header_landing">
+            <section class="header__logo">
+                <a href="{% url 'landingPage' %}">Instant</a>
+            </section>
+            
+            <section class="header__buttons">
+                <div class="button">
+                    <a href="{% url 'login' %}">Iniciar Sesion</a>
+                </div>
+                <div class="button">
+                    <a href="{% url 'register' %}">Registrarse</a>
+                </div>
+            </section>
+        </header>
+        <main class = "contenedor_landing">
+            {% block cuerpo %}
+            {% endblock %}
+        </main>
+</section>
+
+    
+</body>
+</html>
+
+{% comment %}{%solid static%} <img src=" { % static 'path'% }"> {% endcomment %}

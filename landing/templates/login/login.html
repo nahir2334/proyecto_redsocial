@@ -1,0 +1,16 @@
+{%extends '../plantilla.html'%}
+{% block cuerpo %}
+{%load static %}
+<article class="login">
+    <section class="cabecera">
+        <img src="{% static 'img/account.svg' %}" alt="My image" class="loginImage">
+        <h1>Iniciar Sesion</h1>
+    </section>
+    <form action="{% url 'login'%}" method="post">
+        {% csrf_token %}
+        <input type="text" name = "user" placeholder="Usuario">
+        <input type="password" name = "password" placeholder="Contraseña">
+        <input class="btn" type="submit" value="Ingresar">
+    </form>    
+</article>
+{% endblock %}

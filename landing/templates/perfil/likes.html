@@ -1,0 +1,66 @@
+{%extends '../plantilla_user.html'%}
+{% block cuerpo %}
+{% load gravatar %}
+ 
+<section class = "perfil">
+    <article class = "perfil__header">
+        <div class="perfil__imagen">
+        {% if perfil.foto_perfil %}
+            <img src="{{ perfil.foto_perfil.url }}">
+        {% else %}
+            <img src="{% gravatar_url request.user.email %}">
+        {% endif %} 
+        <h4>{{perfil.user.username}}</h4>   
+        </div>
+    {% if perfil.user.id == request.user.id%}
+        <a href="{% url 'updateProfile' id=perfil.user.id%}" class="boton">Editar Perfil</a>
+    {% endif %}  
+    </article>
+    <article class = "perfil__info">
+        <p>{{perfil.biografia}}</p>   
+        <p>{{perfil.preferencias}}</p>   
+        <p>{{perfil.enlaces}}</p>   
+    </article>
+</section>
+<section class="opciones">
+<a href="{% url 'showProfile' id=perfil.user.id%}">Posts</a>
+<a href="{% url 'mostrarLikes' id=perfil.user.id%}">Likes</a>
+<a href="{% url 'mostrarCompartidos' id=perfil.user.id%}">Compartidos</a>
+</section>
+
+{% for like in likes  %}
+{% for post in posts %}
+    {% if post %}
+        {% if post.id == like.post_id and like.username == perfil.user.username%}
+            <article class="post">
+                <div class="post__header">
+                    {% if post.user.foto_perfil %}
+                        <img src="{{post.user.foto_perfil.url }}">
+                    {% else %}
+                        <img src="{% gravatar_url post.user.user.email %}">
+                    {% endif %} 
+                    <h4>{{post.user.user.username}}</h4>
+                    <p class="post__fecha">{{post.fecha}}</p>
+                    
+                </div>
+                <div class="post__content">
+                    <h2>{{post.titulo}}</h2>
+                    {{post.contenido}}
+                    {% if post.image_field %}
+                        <img src="{{ post.image_field.url }}" alt="{{ post.titulo }}" class="post_image"> 
+                    {% endif %}
+                </div>
+                <div class="post__interaction__view">
+                    <div class="post__opciones">
+                        <a href="{% url 'likePost' id=post.id %}"> <i class="fa-solid fa-heart fa-xl"></i> {{post.nom_of_likes}}</a>
+                        <a href="{% url 'detallePosteo' id=post.id%}"><i class="fa-regular fa-comment fa-xl"></i></a>
+                        <a href="{% url 'compartirPost' id=post.id%}"><i class="fa-regular fa-share-from-square fa-xl"></i></a>
+                    </div>
+                </div>
+            </article>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+{% endfor %}
+
+{% endblock %}

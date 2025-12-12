@@ -1,0 +1,55 @@
+{%extends './plantilla_user.html'%}
+{% block cuerpo %}
+{% load gravatar %}
+{% load static%}
+{% if perfiles%}
+    {%  for perfil in perfiles%}
+        <section class = "perfil">
+            <article class = "perfil__header">
+                <div class="perfil__imagen">
+                {% if perfil.foto_perfil %}
+                    <img src="{{ perfil.foto_perfil.url }}">
+                {% else %}
+                    <img src="{% gravatar_url perfil.user.email %}">
+                {% endif %} 
+                <a href="{% url 'showProfile' id=perfil.user.id%}">
+                <h4>{{perfil.user.username}}</h4>   
+                </a>
+                </div>
+            </article>
+            <article class = "perfil__info">
+                <p>{{perfil.biografia}}</p>   
+                <p>{{perfil.preferencias}}</p>   
+                <p>{{perfil.enlaces}}</p>   
+            </article>
+            <article class="perfil__botones">
+            {% if perfil.user.id != request.user.id %}
+                {% for  requests in friend_requests  %}
+                {% if requests.from_user == perfil.user and requests.to_user == request.user and requests.status == 'pending'%}
+                        <a href="{%  url 'acceptRequest' id=perfil.user.id%}" class="btn">Aceptar</a>
+                        <a href="{%  url 'cancelRequest' id=perfil.user.id%}" class="btn">Denegar</a>
+                {%elif  requests.from_user == request.user and requests.to_user == perfil.user and requests.status == 'pending'%}
+                        <a href="{%  url 'cancelRequest' id=perfil.user.id%}" class="btn">Cancelar</a>
+
+                {% elif requests.from_user == request.user and requests.to_user == perfil.user and requests.status == 'accepted'%}
+                        <a href="{%  url 'deleteFriends' id=perfil.user.id%}" class="btn">Eliminar</a> 
+                {% elif requests.from_user == perfil.user and requests.to_user == request.user and requests.status == 'accepted'%}
+                        <a href="{%  url 'deleteFriends' id=perfil.user.id%}" class="btn">Eliminar</a> 
+                {% else %}
+                    <a href="{%  url 'sentRequest' id=perfil.user.id%}" class="btn">Solicitar</a>
+                {% endif %}
+            
+                {% endfor %}
+                
+            {% endif %}
+           
+            </article>
+            
+
+        </section>
+    {%endfor%}
+{% endif %}   
+            
+        
+{% endblock %}
+

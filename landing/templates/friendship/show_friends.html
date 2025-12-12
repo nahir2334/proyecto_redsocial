@@ -1,0 +1,40 @@
+{%extends '../plantilla_user.html'%}
+{% block cuerpo %}
+{% load gravatar %}
+{% load static%}
+{%  for friend in friends%}
+    {%  for perfil in perfiles%}
+        {% if perfil.user != request.user %}
+            {% if perfil.user == friend.user1 or perfil.user == friend.user2 %}
+            <section class = "perfil">
+                <article class = "perfil__header">
+                    <div class="perfil__imagen">
+                    {% if perfil.foto_perfil %}
+                        <img src="{{ perfil.foto_perfil.url }}">
+                    {% else %}
+                        <img src="{% gravatar_url perfil.user.email %}">
+                    {% endif %} 
+                    <h4>{{perfil.user.username}}</h4>   
+                    </div>
+                </article>
+                <article class = "perfil__info">
+                    <p>{{perfil.biografia}}</p>   
+                    <p>{{perfil.preferencias}}</p>   
+                    <p>{{perfil.enlaces}}</p>   
+                </article>
+                <article class="perfil__botones">
+
+                <a href="{%  url 'deleteFriends' id=friend.id%}" class="btn">Eliminar</a>
+                </article>
+                
+            </section>
+                
+        
+            {% endif %}
+        {% endif %}
+    {%endfor%}
+{%endfor%}
+
+
+
+{% endblock %}

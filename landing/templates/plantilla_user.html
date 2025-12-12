@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%load static %}
+    <link rel="stylesheet" href="{%  static './css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>{% block title %}Pagina WEB{% endblock %}</title>
+</head>
+<body>
+    <header class="header__user">
+        <section class="logo">
+            <a href="{% url 'home' %}">Instant</a>
+        </section>
+    </header>
+    <main>
+        <section class="sidebar">
+             <article class="siderbar__top">
+                <div class="sidebar__link">
+                <a href="{% url 'home'  %}"><i class="fa-solid fa-house fa-lg"></i>Inicio</a>
+                </div>
+                <div class="sidebar__link">
+                    <a href="{% url 'showProfile' id=request.user.id%}"><i class="fa-solid fa-user fa-lg"></i>Perfil</a>
+                </div>
+                <div class="sidebar__link">
+                    <a href="{% url 'tendencias'%}"><i class="fa-solid fa-arrow-trend-up fa-lg"></i>Tendencias</a>
+                </div>
+                <div class="sidebar__link">
+                    <a href="{% url 'showFriendRequest'%}"><i class="fa-regular fa-message fa-lg"></i>Solicitudes</a>
+                </div>
+                <div class="sidebar__link">
+                <a href="{% url 'sugerencias'  %}"><i class="fa-solid fa-face-smile fa-lg"></i>Sugerencias</a>
+                </div>
+                <div class="sidebar__link">
+                    <a href="{% url 'showFriends' id=request.user.id %}"><i class="fa-solid fa-user-group fa-lg fa-lg"></i>Amigos</a>
+                </div>
+                <div class="sidebar__link">
+                    <a href="{% url 'newPost'%}"><i class="fa-regular fa-pen-to-square fa-lg"></i>Crear</a>
+                </div>
+            </article>
+             <article class="sidebar__bottom">
+                <div class="sidebar__link">
+                    <a href=" ../2faapp/account/two_factor/setup" >2FA</a>
+                </div>
+                <div class="sidebar__link">
+                    <a href="{% url 'logoutPage' %}"><i class="fa-solid fa-arrow-right-from-bracket fa-lg"></i>Cerrar Sesion</a>
+                </div>
+            </article>
+        </section>
+        <section class="main-container">
+            {% block cuerpo %}
+            {% endblock %}
+        </section>
+        <section class=" sidebar-right">
+            <article class="siderbar__top">
+                <section class="search-bar">
+                     <form method = "POST" action = "{% url 'searchUser'%}">
+                        {% csrf_token %}
+                        <input type = "text" name ="busqueda">
+                        <button class="btn-buscar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                </section>
+                <section>
+                    {{sugeridos}}
+                </section>
+            </article>
+
+        </section>
+    </main>
+
+</body>
+</html>
+
+{% comment %}{%solid static%} <img src=" { % static 'path'% }"> {% endcomment %}

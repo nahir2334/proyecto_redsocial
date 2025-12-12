@@ -1,0 +1,23 @@
+{% extends "two_factor/_base.html"%}
+{% block content %}
+{%load static %}
+<article class="login">
+    <section class="login__header">
+        
+        <img src="{% static 'img/account.svg' %}" alt="My image" class="loginImage">
+            <h1>Iniciar Sesion</h1>
+
+    </section>
+    <form method="post">
+        {% csrf_token %}
+        {{wizard.management_form}}
+        {%for field in wizard.form%}
+            {{field}}
+            {% if field.errors%}
+            <span>{{field.errors}}</span>
+            {% endif %}
+        {% endfor %}
+        <input class="btn" type="submit" value="Ingresar">
+    </form>    
+</article>
+{% endblock %}

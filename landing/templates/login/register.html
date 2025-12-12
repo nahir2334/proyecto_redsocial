@@ -1,0 +1,22 @@
+{%extends '../plantilla.html'%}
+{% block cuerpo %}
+{%load static %}
+    <article class="register">
+            <h2>Registrarse</h2>
+
+        <form action="{% url 'register' %}" method="POST">
+            {% csrf_token %}
+            {% for campo in registerForm %}
+                {{campo}}
+            {% endfor %}
+            <input type="submit" value="Registrarse" class="btn">
+            {% if errors %}
+                {% for  error_list in errors.items %}
+                    {% for error in error_list %}
+                        {{error}}
+                    {% endfor %}
+                {% endfor %}
+            {%endif%}
+        </form>
+    </article>
+{% endblock %}

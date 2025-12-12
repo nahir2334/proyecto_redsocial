@@ -1,0 +1,18 @@
+{%extends '../plantilla_user.html'%}
+{% block cuerpo %}
+{% load gravatar %}
+{%load static %}
+<section class ='perfil'>
+    <form action="" method="POST"  enctype="multipart/form-data">
+            {% csrf_token %}
+                {{formulario}}
+            <input type = "submit" value = "Guardar" class="boton">
+            {{errores}}
+            {% if errores %}
+                {% for field, errors in errores.iteams %}
+                    <li>{{field}} : {{errors}}</li>
+                {% endfor %}
+            {% endif %}
+        </form>
+</section>
+{% endblock %}

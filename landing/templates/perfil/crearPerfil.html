@@ -1,0 +1,17 @@
+{%extends '../plantilla_user.html'%}
+{% block cuerpo %}
+{%load static %}
+<section class ='post'>
+    <form action="" method="POST"  enctype="multipart/form-data">
+            {% csrf_token %}
+                {{formulario}}
+            <input type = "submit" value = "Guardar">
+            {{errores}}
+            {% if errores %}
+                {% for field, errors in errores.iteams %}
+                    <li>{{field}} : {{errors}}</li>
+                {% endfor %}
+            {% endif %}
+        </form>
+</section>
+{% endblock %}

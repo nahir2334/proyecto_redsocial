@@ -1,0 +1,34 @@
+{%extends '../plantilla_user.html'%}
+{% block cuerpo %}
+{% load gravatar %}
+{% load static%}
+{% comment %} Mostrar  Solicitudes {% endcomment %}
+
+<section class = 'containerPost'>  
+<article class="opciones">
+     <a href="{% url 'showSentRequest' %}" class="option">Enviadas</a>
+    <a href="{% url 'showFriendRequest' %}" class="option">Recibidas</a>
+</article>
+
+{% for requests in friend_request %}
+   {% if requests.status == 'pending' %}
+      <section class="solicitud">
+        <article class="solicitud__header">
+         
+                <h4>De:{{requests.from_user.username}}</h4>
+
+                <h4>Para:{{requests.to_user.username}}</h4>
+        </article>
+        
+        <div class="solicitud__botones">
+         <div><a href="{% url 'cancelRequest' id=requests.id %} "class="btn">Eliminar</a></div>
+         <div><a href="{% url 'acceptRequest' id=requests.id %}"class="btn">Aceptar</a></div>
+        </div>
+   </section>
+   {% endif %}
+
+
+{% empty %}
+{% endfor %}
+</section>
+{% endblock %}

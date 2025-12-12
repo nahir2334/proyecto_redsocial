@@ -1,0 +1,69 @@
+{%extends '../plantilla_user.html'%}
+{% block cuerpo %}
+{% load gravatar %}
+{% load static%}
+<section class="post__detalle">
+    <article class="post">
+                <div class="post__header">
+                    {% if post.user.foto_perfil %}
+                        <img src="{{post.user.foto_perfil.url }}">
+                    {% else %}
+                        <img src="{% gravatar_url post.user.user.email %}">
+                    {% endif %} 
+                    <a href="{% url 'showProfile' id=post.user.user.id%}">
+                    <h4>{{post.user.user.username}}</h4>   
+                    </a>
+                    <p class="post__fecha">{{post.fecha}}</p>
+                </div>
+                <div class="post__content">
+                    <h2>{{post.titulo}}</h2>
+                    {{post.contenido}}
+                    {% if post.image_field %}
+                        <img src="{{ post.image_field.url }}" alt="{{ post.titulo }}" class="post_image"> 
+                    {% endif %}
+                </div>
+                <div class="post__interaction__view">
+                    <div class="post__opciones">
+                        <a href="{% url 'likePost' id=post.id %}"> <i class="fa-solid fa-heart fa-xl"></i> {{post.nom_of_likes}}</a>
+                        <a href="{% url 'detallePosteo' id=post.id%}"><i class="fa-regular fa-comment fa-xl"></i></a>
+                        <a href="{% url 'compartirPost' id=post.id%}"><i class="fa-regular fa-share-from-square fa-xl"></i></a>
+                    </div>
+                </div>
+    </article>
+    <article class="form__comentario">
+        <form method="post">
+            {% csrf_token %}
+            {{ form}}
+            <input type="submit" class="btn" value="Comentar">
+            {{errores}}
+        </form>
+    </article>
+    
+    <article class="comentarios">
+        {% if comentarios %}
+            {% for  comentario in comentarios  %}
+                <div class="comentario">
+                    <div class="post__header">
+                        {% if comentario.user.foto_perfil %}
+                            <img src="{{comentario.user.foto_perfil.url }}">
+                        {% else %}
+                            <img src="{% gravatar_url comentario.user.user.email %}">
+                        {% endif %} 
+                    <h4>{{comentario.user.user.username}}<h4>
+                   <p class="post__fecha">{{comentario.fecha}}</p>
+                    </div>
+                    <div class="comment">{{comentario.contenido}}</div>
+                    <div class="post__interaction__view">
+                        {% if comentario.user.user == request.user %}
+                        <a href="{%  url 'eliminarComentario' comentario.id %}" class="btn">Eliminar</a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+            {% endfor %}
+        {% endif %}
+    </article>
+</section>
+
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{%extends '../plantilla_user.html'%}
+{% block cuerpo %}
+{% comment %} Mostrar  post del usuario {% endcomment %}
+{% for post in posts %}
+    {% if !post.publicado %}
+        {% if post.user.id == perfil.user.id%}
+            <article class="post">
+                <div class="post__header">
+                    {% if post.user.foto_perfil %}
+                        <img src="{{post.user.foto_perfil.url }}">
+                    {% else %}
+                        {% comment %} <img src="{% gravatar_url post.user.user.email %}"> {% endcomment %}
+                    {% endif %} 
+                    <h4>{{post.user.user.username}}</h4>
+                    <p class="post__fecha">{{post.fecha}}</p>
+                    
+                </div>
+                <div class="post__content">
+                    <h2>{{post.titulo}}</h2>
+                    {{post.contenido}}
+                    {% if post.image_field %}
+                        <img src="{{ post.image_field.url }}" alt="{{ post.titulo }}" class="post_image"> 
+                    {% endif %}
+                </div>
+                <div class="post__interaction">
+                    <div class="post__opciones">
+                        <a href="{% url 'deletePost' id=post.id %}" class="btn">Eliminar</a>
+                        <a href="{% url 'updatePost' id=post.id %}" class="btn">Modificar</a>
+                    </div>
+                    <div class="post__opciones">
+                        <a href="{% url 'likePost' id=post.id %}"> <i class="fa-solid fa-heart fa-xl"></i> {{post.nom_of_likes}}</a>
+                        <a href="{% url 'detallePosteo' id=post.id%}"><i class="fa-regular fa-comment fa-xl"></i></a>
+                        <a href="{% url 'compartirPost' id=post.id%}"><i class="fa-regular fa-share-from-square fa-xl"></i></a>
+                    </div>
+                </div>
+            </article>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+{% endblock %}

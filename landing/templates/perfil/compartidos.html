@@ -1,0 +1,60 @@
+{%extends '../plantilla_user.html'%}
+{% block cuerpo %}
+{% load gravatar %}
+ 
+<section class = "perfil">
+    <article class = "perfil__header">
+        <div class="perfil__imagen">
+        {% if perfil.foto_perfil %}
+            <img src="{{ perfil.foto_perfil.url }}">
+        {% else %}
+                          <img src="{% gravatar_url request.user.email %}">
+        {% endif %} 
+        <h4>{{perfil.user.username}}</h4>   
+        </div>
+    {% if perfil.user.id == request.user.id%}
+        <a href="{% url 'updateProfile' id=perfil.user.id%}" class="boton">Editar Perfil</a>
+    {% endif %}  
+    </article>
+    <article class = "perfil__info">
+        <p>{{perfil.biografia}}</p>   
+        <p>{{perfil.preferencias}}</p>   
+        <p>{{perfil.enlaces}}</p>   
+    </article>
+</section>
+<section class="opciones">
+<a href="{% url 'showProfile' id=perfil.user.id%}">Posts</a>
+<a href="{% url 'mostrarLikes' id=perfil.user.id%}">Likes</a>
+<a href="{% url 'mostrarCompartidos' id=perfil.user.id%}">Compartidos</a>
+</section>
+{% for compartido in compartidos %}
+            <article class="post">
+                <div class="post__header">
+                    {% if compartido.posteo_original.user.foto_perfil %}
+                        <img src="{{compartido.posteo_original.user.foto_perfil.url }}">
+                    {% else %}
+                          <img src="{% gravatar_url request.user.email %}">
+                    {% endif %} 
+                    <h4>{{compartido.posteo_original.user.user.username}}</h4>
+                    <p class="post__fecha">{{compartido.posteo_original.fecha}}</p>
+                    
+                </div>
+                <div class="post__content">
+                    <h2>{{compartido.posteo_original.titulo}}</h2>
+                    {{compartido.posteo_original.contenido}}
+                    {% if compartido.posteo_original.image_field %}
+                        <img src="{{ compartido.posteo_original.image_field.url }}" alt="{{ compartido.posteo_original.titulo }}" class="post_image"> 
+                    {% endif %}
+                </div>
+                <div class="post__interaction__view">
+                    <div class="post__opciones">
+                        <a href="{% url 'likePost' id=compartido.posteo_original.id %}"> <i class="fa-solid fa-heart fa-xl"></i> {{compartido.posteo_original.nom_of_likes}}</a>
+                        <a href="{% url 'detallePosteo' id=compartido.posteo_original.id%}"><i class="fa-regular fa-comment fa-xl"></i></a>
+                        <a href="{% url 'compartirPost' id=compartido.posteo_original.id%}"><i class="fa-regular fa-share-from-square fa-xl"></i></a>
+                    </div>
+                </div>
+            </article>
+
+{% endfor%}
+
+{% endblock %}
