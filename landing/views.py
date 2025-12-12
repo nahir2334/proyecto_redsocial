@@ -52,7 +52,7 @@ def crearPosteo(request):
                     titulo_form = formularioListo.get('titulo')
                     contenido_form = formularioListo.get('contenido')
                     publicado_form = formularioListo.get('publicado')
-                    imagen_form = request.FILES.get('image_Field')
+                    imagen_form = request.FILES.get('image_field')
                     posteos = Posteos(
                          titulo = titulo_form,
                          contenido = contenido_form,
@@ -115,7 +115,7 @@ def home(request):
 def eliminarPosteo(request, id):
      posteo = Posteos.objects.get(pk=id)
      posteo.delete()
-     return redirect('showProfile')
+     return redirect('showProfile', id=request.user.id)
 
 def modificarPosteo(request, id):
      posteo = Posteos.objects.get(pk=id)
@@ -131,7 +131,7 @@ def modificarPosteo(request, id):
                     posteos.titulo = titulo_form
                     posteos.contenido = contenido_form
                     posteos.publicado = publicado_form
-                    posteos.imagen_form = imagen_form
+                    posteos.image_field = imagen_form
                     posteos.save()
                     return redirect('showProfile')     
           else:
